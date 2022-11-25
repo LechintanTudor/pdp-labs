@@ -17,11 +17,11 @@ using BoxedMutex = std::unique_ptr<std::mutex>;
 using MutexGuard = std::unique_lock<std::mutex>;
 using Clock = std::chrono::high_resolution_clock;
 
-constexpr size_t NUM_SALE_THREADS = 8;
-constexpr size_t NUM_SALES_PER_THREAD = 20;
-constexpr size_t NUM_SALE_CHECKS = 20;
-constexpr auto SALE_INTERVAL = 3s;
-constexpr auto SALE_CHECK_INTERVAL = 3s;
+constexpr size_t NUM_SALE_THREADS = 16;
+constexpr size_t NUM_SALES_PER_THREAD = 200000;
+constexpr size_t NUM_SALE_CHECKS = 200000;
+constexpr auto SALE_INTERVAL = 30ms;
+constexpr auto SALE_CHECK_INTERVAL = 60ms;
 
 struct Product {
     std::string name;

@@ -1,0 +1,13 @@
+[package]
+name = "lab3"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+criterion = "0.4"
+rand = "0.8.5"
+rayon = "1.5.3"
+
+[[bench]]
+name = "benchmarks"
+harness = false
