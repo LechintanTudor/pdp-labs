@@ -1,44 +1,27 @@
-use crate::multiplication::common;
-use crate::Polynomial;
-use criterion::black_box;
-use rayon::prelude::{IndexedParallelIterator, IntoParallelIterator, ParallelIterator};
+use rayon::prelude::*;
 
-pub struct Benchmark {
-    p1: Polynomial,
-    p2: Polynomial,
-    r_len: usize,
-    r: Vec<i64>,
-}
+pub fn multiply(p1: &[i64], p2: &[i64]) -> Vec<i64> {
+    let r_len = p1.len() + p2.len() - 1;
+    let mut r = Vec::<i64>::new();
 
-impl Benchmark {
-    pub fn new() -> Self {
-        let (p1, p2) = common::generate_polynomials();
-        let r_len = p1.len() + p2.len() - 1;
+    (0..r_len)
+        .into_par_iter()
+        .map(|r_index| {
+            let p1_index_range = if r_index < p1.len() {
+                0..(r_index + 1)
+            } else {
+                (r_index - p2.len() + 1)..p1.len()
+            };
 
-        Self { p1, p2, r_len, r: Vec::new() }
-    }
+            p1_index_range
+                .map(|p1_index| {
+                    let c1 = p1[p1_index];
+                    let c2 = p2[r_index - p1_index];
+                    c1 * c2
+                })
+                .sum::<i64>()
+        })
+        .collect_into_vec(&mut r);
 
-    pub fn run(&mut self) {
-        (0..self.r_len)
-            .into_par_iter()
-            .map(|r_degree| {
-                let p1_degree_range = if r_degree <= self.p1.degree() {
-                    0..=r_degree
-                } else {
-                    (r_degree - self.p2.degree())..=self.p1.degree()
-                };
-
-                p1_degree_range
-                    .map(|p1_degree| {
-                        let p2_degree = r_degree - p1_degree;
-                        let c1 = self.p1.coefficients()[p1_degree];
-                        let c2 = self.p2.coefficients().get(p2_degree).copied().unwrap_or(0);
-                        c1 * c2
-                    })
-                    .sum::<i64>()
-            })
-            .collect_into_vec(&mut self.r);
-
-        black_box(self.r.as_slice());
-    }
+    r
 }
