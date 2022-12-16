@@ -15,9 +15,9 @@ pub fn multiply(p1: &[i64], p2: &[i64]) -> Vec<i64> {
     let mut sum_product = Vec::<i64>::new();
 
     rayon::scope(|s| {
-        s.spawn(|_| low_product = simple_multiply(p1_low, p2_low));
-        s.spawn(|_| high_product = simple_multiply(p1_high, p2_high));
-        sum_product = simple_multiply(&p1_sum, &p2_sum);
+        s.spawn(|_| low_product = multiply(p1_low, p2_low));
+        s.spawn(|_| high_product = multiply(p1_high, p2_high));
+        sum_product = multiply(&p1_sum, &p2_sum);
     });
 
     let middle_product: Vec<i64> = sum_product

@@ -10,9 +10,9 @@ pub fn multiply(p1: &[i64], p2: &[i64]) -> Vec<i64> {
     let p1_sum = p1_low.iter().zip(p1_high.iter()).map(|(c1, c2)| c1 + c2).collect::<Vec<_>>();
     let p2_sum = p2_low.iter().zip(p2_high.iter()).map(|(c1, c2)| c1 + c2).collect::<Vec<_>>();
 
-    let low_product = simple_multiply(p1_low, p2_low);
-    let high_product = simple_multiply(p1_high, p2_high);
-    let sum_product = simple_multiply(&p1_sum, &p2_sum);
+    let low_product = multiply(p1_low, p2_low);
+    let high_product = multiply(p1_high, p2_high);
+    let sum_product = multiply(&p1_sum, &p2_sum);
 
     let middle_product: Vec<i64> = sum_product
         .iter()
