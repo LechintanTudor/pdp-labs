@@ -1,0 +1,8 @@
+[package]
+name = "lab7"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+mpi = "0.6"
