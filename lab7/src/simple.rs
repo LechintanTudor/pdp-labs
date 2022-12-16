@@ -9,12 +9,12 @@ pub fn run() {
         let (p1, p2) = utils::generate_polynomials(12);
 
         let mut result = vec![0_i64; p1.len() + p2.len() - 1];
-        let chunk_size = result.len() / state.slave_processs_count();
-        let last_chunk_size = chunk_size + result.len() % state.slave_processs_count();
+        let chunk_size = result.len() / state.slave_process_count();
+        let last_chunk_size = chunk_size + result.len() % state.slave_process_count();
 
-        // Send standard chunks to all slave processs but one
-        for i in 0..(state.slave_processs_count() - 1) {
-            let slave = state.get_slave_processs(i);
+        // Send standard chunks to all slave process but one
+        for i in 0..(state.slave_process_count() - 1) {
+            let slave = state.get_slave_process(i);
 
             slave.send(&((i * chunk_size) as u64));
             slave.send(&(chunk_size as u64));
@@ -22,9 +22,9 @@ pub fn run() {
             slave.send(&p2);
         }
 
-        // Send extended chunk to last slave processs
+        // Send extended chunk to last slave process
         {
-            let slave = state.get_slave_processs(state.slave_processs_count() - 1);
+            let slave = state.get_slave_process(state.slave_process_count() - 1);
 
             slave.send(&((result.len() - last_chunk_size) as u64));
             slave.send(&(last_chunk_size as u64));
@@ -32,19 +32,19 @@ pub fn run() {
             slave.send(&p2);
         }
 
-        // Receive standard chunks from all but one slave processs
-        for i in 0..(state.slave_processs_count() - 1) {
+        // Receive standard chunks from all but one slave process
+        for i in 0..(state.slave_process_count() - 1) {
             state
-                .get_slave_processs(i)
+                .get_slave_process(i)
                 .receive_into(&mut result[(i * chunk_size)..((i + 1) * chunk_size)]);
         }
 
-        // Receive extended chunk from last slave processs
+        // Receive extended chunk from last slave process
         {
             let chunk_start = result.len() - last_chunk_size;
 
             state
-                .get_slave_processs(state.slave_processs_count() - 1)
+                .get_slave_process(state.slave_process_count() - 1)
                 .receive_into(&mut result[chunk_start..]);
         }
 

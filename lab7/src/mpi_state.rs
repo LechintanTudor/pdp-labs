@@ -16,7 +16,7 @@ impl Default for MpiState {
         let world = universe.world();
 
         if world.size() < 2 {
-            panic!("at least 2 processses are required");
+            panic!("at least 2 processes are required");
         }
 
         Self { universe, world }
@@ -35,12 +35,12 @@ impl MpiState {
     }
 
     #[inline]
-    pub fn get_slave_processs(&self, index: usize) -> Process<SystemCommunicator> {
+    pub fn get_slave_process(&self, index: usize) -> Process<SystemCommunicator> {
         self.world.process_at_rank((index + 1) as i32)
     }
 
     #[inline]
-    pub fn slave_processs_count(&self) -> usize {
+    pub fn slave_process_count(&self) -> usize {
         self.world.size() as usize - 1
     }
 }
