@@ -1,8 +1,10 @@
+#![allow(dead_code)]
+
 mod karatsuba;
 mod mpi_state;
 mod simple;
 mod utils;
 
 fn main() {
-    simple::run();
+    karatsuba::multiply_distributed();
 }

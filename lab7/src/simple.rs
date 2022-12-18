@@ -2,11 +2,11 @@ use crate::mpi_state::MpiState;
 use crate::utils;
 use mpi::traits::*;
 
-pub fn run() {
+pub fn multiply_distributed() {
     let state = MpiState::default();
 
     if state.is_master() {
-        let (p1, p2) = utils::generate_polynomials(12);
+        let (p1, p2) = utils::generate_polynomials(1024);
 
         let mut result = vec![0_i64; p1.len() + p2.len() - 1];
         let chunk_size = result.len() / state.slave_process_count();
